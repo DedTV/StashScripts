@@ -1,0 +1,25 @@
+name: "Video Sampler (TS Standardized)"
+description: "Generates standardized 30s .ts clips at 50%, 75%, and 90% duration for gapless joining."
+version: "1.2"
+
+exec:
+  - python
+  - "{pluginDir}/video_sampler.py"
+
+tasks:
+  - name: "Generate TS Samples for 5-Star Scenes"
+    description: "Creates .ts samples for scenes rated 5 stars."
+    defaultArgs:
+      mode: "rated"
+  - name: "Generate TS Samples for 3-Star Scenes"
+    description: "Creates .ts samples for scenes rated 3 stars."
+    defaultArgs:
+      mode: "three_star"
+  - name: "Generate TS Samples for Tagged Scenes"
+    description: "Creates .ts samples for scenes with a specific tag."
+    defaultArgs:
+      mode: "tag"
+  - name: "Generate TS Samples for All Scenes"
+    description: "Creates .ts samples for every scene in the library (Warning: slow)."
+    defaultArgs:
+      mode: "all"
