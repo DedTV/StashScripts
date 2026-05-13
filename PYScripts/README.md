@@ -1,0 +1,286 @@
+# Captions.py
+
+## Description
+Generates SRT subtitles for video files using the `faster-whisper` model. It translates audio to English and groups words into short, readable chunks. Includes a 10-minute timeout per file to prevent hangs.
+
+## Requirements
+- Python 3.x
+- Access to the relevant media or database files.
+
+## Configuration & Usage
+Update `SOURCE_DIR`, `MODEL_SIZE` (e.g., 'large-v3'), and `DEVICE` (e.g., 'cuda' or 'cpu'). Requires `faster-whisper` and a GPU for optimal performance.
+
+1. Open the script in a text editor.
+2. Locate the configuration section at the top (usually marked with `--- CONFIGURATION ---`).
+3. Modify the paths and variables to match your environment.
+4. Run the script: `python Captions.py`
+
+
+# CheckVideos.py
+
+## Description
+A multiprocessing-capable video integrity checker. It uses FFmpeg to probe files for errors, maintaining a progress log to resume interrupted scans and a 'bad files' list for easy identification of broken media.
+
+## Requirements
+- Python 3.x
+- Access to the relevant media or database files.
+
+## Configuration & Usage
+Adjust `ROOT_DIR` to your media path and `MAX_WORKERS` to match your CPU core count.
+
+1. Open the script in a text editor.
+2. Locate the configuration section at the top (usually marked with `--- CONFIGURATION ---`).
+3. Modify the paths and variables to match your environment.
+4. Run the script: `python CheckVideos.py`
+
+
+# check_video_corruption.py
+
+## Description
+Scans a directory for MP4 files and uses FFmpeg with CUDA hardware acceleration to detect stream corruption or decoding errors. Outputs results to a CSV and logs detailed errors.
+
+## Requirements
+- Python 3.x
+- Access to the relevant media or database files.
+
+## Configuration & Usage
+Requires FFmpeg with CUDA support. The script prompts for the directory path upon execution.
+
+1. Open the script in a text editor.
+2. Locate the configuration section at the top (usually marked with `--- CONFIGURATION ---`).
+3. Modify the paths and variables to match your environment.
+4. Run the script: `python check_video_corruption.py`
+
+
+# clipsT.py
+
+## Description
+Traverses a directory to find MP4s and automatically cuts them into segments of a specified duration (default 45 seconds) using `moviepy`.
+
+## Requirements
+- Python 3.x
+- Access to the relevant media or database files.
+
+## Configuration & Usage
+Edit the `traverse_and_cut_videos` call at the bottom of the script with your source and destination paths.
+
+1. Open the script in a text editor.
+2. Locate the configuration section at the top (usually marked with `--- CONFIGURATION ---`).
+3. Modify the paths and variables to match your environment.
+4. Run the script: `python clipsT.py`
+
+
+# find_and_export_duplicates.py
+
+## Description
+Connects to a Stash SQLite database and identifies scenes with identical titles. Exports the ID and Title of duplicate records to a tab-separated text file.
+
+## Requirements
+- Python 3.x
+- Access to the relevant media or database files.
+
+## Configuration & Usage
+Update `DATABASE_PATH` and `OUTPUT_PATH` constants at the top of the file.
+
+1. Open the script in a text editor.
+2. Locate the configuration section at the top (usually marked with `--- CONFIGURATION ---`).
+3. Modify the paths and variables to match your environment.
+4. Run the script: `python find_and_export_duplicates.py`
+
+
+# find_duplicate_titles.py
+
+## Description
+A utility to identify duplicate scene titles in a Stash database and output only the titles themselves to a text file. Useful for manual cleanup planning.
+
+## Requirements
+- Python 3.x
+- Access to the relevant media or database files.
+
+## Configuration & Usage
+Update the `db_path` and `output_file` variables at the bottom of the script.
+
+1. Open the script in a text editor.
+2. Locate the configuration section at the top (usually marked with `--- CONFIGURATION ---`).
+3. Modify the paths and variables to match your environment.
+4. Run the script: `python find_duplicate_titles.py`
+
+
+# fixurls.py
+
+## Description
+Cleans up junk characters and metadata artifacts (like duration tags or backslashes) from URLs in the `scene_urls` table of a Stash SQLite database using Regex.
+
+## Requirements
+- Python 3.x
+- Access to the relevant media or database files.
+
+## Configuration & Usage
+Ensure `stash-go.sqlite` is in the same directory as the script or update the `sqlite3.connect` path.
+
+1. Open the script in a text editor.
+2. Locate the configuration section at the top (usually marked with `--- CONFIGURATION ---`).
+3. Modify the paths and variables to match your environment.
+4. Run the script: `python fixurls.py`
+
+
+# foldercheck.py
+
+## Description
+Identifies 'Studios' in a Stash database that lack a corresponding entry in the 'folders' table. Useful for diagnosing organization/mapping issues after library moves.
+
+## Requirements
+- Python 3.x
+- Access to the relevant media or database files.
+
+## Configuration & Usage
+Update `DB_PATH` and `OUTPUT_CSV` constants at the top of the file.
+
+1. Open the script in a text editor.
+2. Locate the configuration section at the top (usually marked with `--- CONFIGURATION ---`).
+3. Modify the paths and variables to match your environment.
+4. Run the script: `python foldercheck.py`
+
+
+# joinmp4s.py
+
+## Description
+Safely concatenates multiple MP4 files. It standardizes segments into MPEG-TS format using NVENC (NVIDIA GPU) acceleration before stitching them to ensure perfect sync and compatibility.
+
+## Requirements
+- Python 3.x
+- Access to the relevant media or database files.
+
+## Configuration & Usage
+Place the script in the folder containing the MP4s you want to join. Requires an NVIDIA GPU for `hevc_nvenc` support.
+
+1. Open the script in a text editor.
+2. Locate the configuration section at the top (usually marked with `--- CONFIGURATION ---`).
+3. Modify the paths and variables to match your environment.
+4. Run the script: `python joinmp4s.py`
+
+
+# MakeClips.py
+
+## Description
+Creates three 10-second preview samples (at 50%, 75%, and 90% of the duration) for MP4 videos in a source directory. Uses stream copying for near-instant processing without quality loss.
+
+## Requirements
+- Python 3.x
+- Access to the relevant media or database files.
+
+## Configuration & Usage
+Update `FFMPEG_PATH`, `FFPROBE_PATH`, `SOURCE_DIR`, and `OUTPUT_DIR`. Adjust the `file_limit` variable if you wish to process more than 5 files.
+
+1. Open the script in a text editor.
+2. Locate the configuration section at the top (usually marked with `--- CONFIGURATION ---`).
+3. Modify the paths and variables to match your environment.
+4. Run the script: `python MakeClips.py`
+
+
+# stash_reorganize.py
+
+## Description
+Restores the 'Organized' status of scenes in a Stash database using a temporary tracker table. It specifically targets scenes previously marked as 0 (unorganized) that are present in the `tmp_organized_tracker` table, then cleans up the tracker.
+
+## Requirements
+- Python 3.x (or PowerShell for .ps1 files)
+- Access to the relevant media or database files.
+
+## Configuration & Usage
+Ensure `DB_PATH` points to your `stash-go.sqlite` file. Run this *after* your identification/reorganization work is complete to restore the status.
+
+1. Open the file in a text editor.
+2. Locate the configuration section at the top.
+3. Modify the paths and variables to match your environment.
+4. Run the script: `python stash_reorganize.py` (or `powershell ./stash_reorganize.py`)
+
+
+# stash_unorganize.py
+
+## Description
+Prepares a Stash library for the 'Identify' task by backing up currently organized scene IDs into a temporary table and then setting their status to 'Unorganized' (0). This ensures they are picked up by the identification process.
+
+## Requirements
+- Python 3.x (or PowerShell for .ps1 files)
+- Access to the relevant media or database files.
+
+## Configuration & Usage
+Ensure `DB_PATH` points to your `stash-go.sqlite` file. Run this *before* running the Stash 'Identify' task.
+
+1. Open the file in a text editor.
+2. Locate the configuration section at the top.
+3. Modify the paths and variables to match your environment.
+4. Run the script: `python stash_unorganize.py` (or `powershell ./stash_unorganize.py`)
+
+
+# TitleCase.py
+
+## Description
+Connects to a Stash SQLite database to scan all scene titles and convert them to proper 'Smart' Title Case using a library. Includes a custom abbreviation list (USA, UK, etc.) to maintain correct acronym capitalization.
+
+## Requirements
+- Python 3.x (or PowerShell for .ps1 files)
+- Access to the relevant media or database files.
+
+## Configuration & Usage
+Requires the `titlecase` library (`pip install titlecase`). Update `DATABASE_FILE` and modify the `custom_abbreviations` list as needed.
+
+1. Open the file in a text editor.
+2. Locate the configuration section at the top.
+3. Modify the paths and variables to match your environment.
+4. Run the script: `python TitleCase.py` (or `powershell ./TitleCase.py`)
+
+
+# toggle_organized.py
+
+## Description
+A debug-friendly utility that toggles scenes between Organized and Unorganized states. If a tracker exists, it reverts scenes to organized; if not, it backs up organized IDs and sets them to 0. Includes extensive logging for troubleshooting.
+
+## Requirements
+- Python 3.x (or PowerShell for .ps1 files)
+- Access to the relevant media or database files.
+
+## Configuration & Usage
+Verify the `DB_PATH` variable. This script is intended for testing and manual recovery of the organized status.
+
+1. Open the file in a text editor.
+2. Locate the configuration section at the top.
+3. Modify the paths and variables to match your environment.
+4. Run the script: `python toggle_organized.py` (or `powershell ./toggle_organized.py`)
+
+
+# trimscrapers.py
+
+## Description
+Scans a community scraper directory to identify folders where *none* of the contained files contain any Top-Level Domains (TLDs) from a provided list. Useful for filtering out scrapers that don't point to external URLs.
+
+## Requirements
+- Python 3.x (or PowerShell for .ps1 files)
+- Access to the relevant media or database files.
+
+## Configuration & Usage
+Set `TLD_INPUT` (path to a text file with one TLD per line), `SEARCH_ROOT` (your scrapers folder), and `RESULT_OUTPUT` (where to save the folder list).
+
+1. Open the file in a text editor.
+2. Locate the configuration section at the top.
+3. Modify the paths and variables to match your environment.
+4. Run the script: `python trimscrapers.py` (or `powershell ./trimscrapers.py`)
+
+
+# video_samplerTS.py
+
+## Description
+A Stash plugin script that generates standardized 30-second .ts clips at specific points (50%, 75%, 90%) of a video's duration. It uses NVENC for high-speed hardware-accelerated transcoding to 1080p, optimized for gapless joining.
+
+## Requirements
+- Python 3.x (or PowerShell for .ps1 files)
+- Access to the relevant media or database files.
+
+## Configuration & Usage
+Requires `stashapi`. Update `FFMPEG_PATH`, `FFPROBE_PATH`, and `OUTPUT_DIR`. Designed to run as a Stash plugin via the associated .yml file.
+
+1. Open the file in a text editor.
+2. Locate the configuration section at the top.
+3. Modify the paths and variables to match your environment.
+4. Run the script: `python video_samplerTS.py` (or `powershell ./video_samplerTS.py`)
